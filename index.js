@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 7860;
 
 // لتمكين السيرفر من قراءة البيانات المرسلة من الواجهة
 app.use(express.json());
@@ -50,14 +50,16 @@ async function runViewerBot(url, totalToReach) {
         try {
             // إعدادات المتصفح المناسبة لبيئة Render
             browser = await puppeteer.launch({
-                headless: "new",
-                args: [
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
-                    '--disable-gpu'
-                ]
-            });
+    headless: "new",
+    executablePath: '/usr/bin/chromium', // المسار الافتراضي في نظام لينكس/دوكر
+    args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu'
+    ]
+});
+
 
             const page = await browser.newPage();
             // User-Agent ليبدو كزائر حقيقي
