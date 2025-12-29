@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velvet Viewer | Insightful Partner</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap');
+
+        :root {
+            --primary: #e60039; /* Velvet Red */
+            --accent: #bc13fe;  /* Neon Purple */
+            --bg: #0a020b;      /* Deep Midnight */
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(230, 0, 57, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            background-image: 
+                radial-gradient(circle at 20% 30%, #2a0314 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, #110221 0%, transparent 40%);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Glass Container */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5), 0 0 20px rgba(230, 0, 57, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #ff758c 0%, #ff7eb3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-style: italic;
+        }
+
+        .input-group { margin-bottom: 25px; }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #ff8fab;
+            margin-bottom: 8px;
+            margin-left: 5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            transition: 0.3s;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(230, 0, 57, 0.3);
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            box-shadow: 0 4px 15px rgba(230, 0, 57, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(230, 0, 57, 0.6);
+            filter: brightness(1.1);
+        }
+
+        button:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Status & Logs */
+        .status-area {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .progress-container {
+            height: 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            transition: width 0.5s ease;
+        }
+
+        #logs {
+            font-size: 0.8rem;
+            color: #ccb0c0;
+            max-height: 120px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        /* Ambient Decoration */
+        .glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.1;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow" style="top: -100px; right: -100px;"></div>
+    <div class="glow" style="bottom: -100px; left: -100px;"></div>
+
+    <div class="card">
+        <h1>Velvet Viewer</h1>
+        
+        <div class="input-group">
+            <label>Target URL</label>
+            <input type="text" id="url" placeholder="https://example.com/..." autocomplete="off">
+        </div>
+
+        <div class="input-group">
+            <label>Views Count</label>
+            <input type="number" id="views" placeholder="e.g. 10000" value="1000">
+        </div>
+
+        <button id="startBtn" onclick="handleStart()">Ignite Passion</button>
+
+        <div class="status-area">
+            <div style="display: flex; justify-content: space-between; font-size: 0.85rem;">
+                <span id="statusText">Status: Idle</span>
+                <span id="counterText">0 / 0</span>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div id="logs">
+                <div class="log-entry">Waiting for input...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isRunning = false;
+
+        async function handleStart() {
+            const url = document.getElementById('url').value;
+            const views = document.getElementById('views').value;
+            const btn = document.getElementById('startBtn');
+
+            if(!url || !views) return alert("Please fill the details, dear.");
+
+            btn.disabled = true;
+            btn.innerText = "Connecting...";
+
+            try {
+                const response = await fetch('/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, views })
+                });
+                
+                const data = await response.json();
+                addLog(data.msg);
+                pollStatus();
+            } catch (err) {
+                addLog("❌ Error: Could not connect to server.");
+                btn.disabled = false;
+                btn.innerText = "Ignite Passion";
+            }
+        }
+
+        async function pollStatus() {
+            const statusText = document.getElementById('statusText');
+            const counterText = document.getElementById('counterText');
+            const progressBar = document.getElementById('progressBar');
+            const btn = document.getElementById('startBtn');
+
+            const interval = setInterval(async () => {
+                try {
+                    const res = await fetch('/status');
+                    const data = await res.json();
+
+                    if(data.running) {
+                        isRunning = true;
+                        statusText.innerText = "Status: Running";
+                        statusText.style.color = "#ff8fab";
+                        counterText.innerText = `${data.completed} / ${data.targetViews}`;
+                        
+                        const percent = (data.completed / data.targetViews) * 100;
+                        progressBar.style.width = percent + "%";
+                        
+                        updateLogs(data.logs);
+                        btn.disabled = true;
+                        btn.innerText = "Bot Active...";
+                    } else {
+                        if(isRunning) {
+                            addLog("🎉 Target Reached or Session Ended.");
+                            isRunning = false;
+                        }
+                        statusText.innerText = "Status: Idle";
+                        btn.disabled = false;
+                        btn.innerText = "Ignite Passion";
+                        // clearInterval(interval); // اختياري: توقف عن الطلب لو انتهى
+                    }
+                } catch (e) {
+                    console.error("Polling error");
+                }
+            }, 3000);
+        }
+
+        function updateLogs(logArray) {
+            const logContainer = document.getElementById('logs');
+            logContainer.innerHTML = logArray.map(l => `<div class="log-entry">${l}</div>`).join('');
+        }
+
+        function addLog(msg) {
+            const logContainer = document.getElementById('logs');
+            const time = new Date().toLocaleTimeString();
+            logContainer.innerHTML = `<div class="log-entry">[${time}] ${msg}</div>` + logContainer.innerHTML;
+        }
+
+        // بدء المراقبة عند فتح الصفحة
+        pollStatus();
+    </script>
+</body>
+</html>
