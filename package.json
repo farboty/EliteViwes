@@ -1,0 +1,25 @@
+{
+  "name": "velvet-viewer",
+  "version": "1.0.0",
+  "description": "Romantic View Bot with Puppeteer",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "puppeteer",
+    "bot",
+    "express"
+  ],
+  "author": "Fares",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "puppeteer": "^22.6.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
